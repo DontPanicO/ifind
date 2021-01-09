@@ -21,7 +21,6 @@ import sys
 import subprocess
 import argparse
 
-from termcolor import cprint
 
 __author__ = "DontPanicO"
 __version__ = "1.0"
@@ -101,6 +100,7 @@ if __name__ == '__main__':
         options['grep']['regex'] = "-E" if args.regex else ""
         options['grep']['insensitive'] = "-i" if args.case_insensitive else ""
         options['grep']['lnumber'] = "-n" if args.lnumber or args.print_lines else ""
+        options['grep']['colored'] = "--color=auto" if args.color else ""
         parsed_grep_options = " ".join(options['grep'].values()).strip()
 
         # Define the right command.
