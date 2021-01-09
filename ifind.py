@@ -70,7 +70,13 @@ if __name__ == '__main__':
 
         parser.add_argument(
                         "-l", "--print-lines",
-                        help="Print also lines, insted of only filenames",
+                        help="Print also lines and line numbers",
+                        action="store_true", default=False,
+                )
+
+        parser.add_argument(
+                        "-n", "--lnumber",
+                        help="Print also line numbers",
                         action="store_true", default=False,
                 )
 
@@ -94,16 +100,19 @@ if __name__ == '__main__':
         options['find'] = dict()
         options['grep']['regex'] = "-E" if args.regex else ""
         options['grep']['insensitive'] = "-i" if args.case_insensitive else ""
+        options['grep']['lnumber'] = "-n" if args.lnumber or args.print_lines else ""
         parsed_grep_options = " ".join(options['grep'].values()).strip()
 
-        # Define the right command. Different if there is or there is no options and if -l is present
+        # Define the right command.
         if not any(options.values()):
             command = f"find {directory} -type f -print0 | xargs -0 grep {search} | cut -d':' -f1"
         else:
-            if not args.print_lines:
-                command = f"find {directory} -type f -print0 | xargs -0 grep {parsed_grep_options} {search} | cut -d':' -f1"
+            if args.print_lines:
+                command = f"find {directory} -type f -print0 | xargs -0 grep {parsed_grep_options} {search}"
+            elif args.lnumber:
+                command = f"find {directory} -type f -print0 | xargs -0 grep {parsed_grep_options} {search} | cut -d':' -f1,2"
             else:
-                command = f"find {directory} -type f -print0 | xargs -0 grep {parsed_grep_options} -n {search}"
+                command = f"find {directory} -type f -print0 | xargs -0 grep {parsed_grep_options} {search} | cut -d':' -f1"
 
         result = subprocess.check_output(command, shell=True, stdin=DEVNULL, stderr=DEVNULL).decode()
 
