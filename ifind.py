@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python3.8
 
 """
    Copyright  2021  Andrea Tedeschi  DontPanicO
@@ -20,6 +20,8 @@ import os
 import sys
 import subprocess
 import argparse
+
+from termcolor import cprint
 
 __author__ = "DontPanicO"
 __version__ = "1.0"
@@ -56,12 +58,25 @@ if __name__ == '__main__':
 
         parser.add_argument(
                         "-r", "--regex",
-                        help="A flag telling the script to treat",
+                        help="Search is regular expression",
                         action="store_true", default=False,
                 )
+
         parser.add_argument(
                         "-i", "--case-insensitive",
-                        help="If present the script will act case insensitive",
+                        help="The script will acts case insensitive",
+                        action="store_true", default=False,
+                )
+
+        parser.add_argument(
+                        "-l", "--print-lines",
+                        help="Print also lines, insted of only filenames",
+                        action="store_true", default=False,
+                )
+
+        parser.add_argument(
+                        "--colored",
+                        help="Fancy colored output",
                         action="store_true", default=False,
                 )
 
@@ -72,17 +87,23 @@ if __name__ == '__main__':
         directory = args.directory
         search = args.search
 
-        # Store options in a dict object adn define a string containing all options
+        # Store options in a dict object and define a string containing options
+        # that have to be included in the command
         options = dict()
-        options['regex'] = "-E" if args.regex else ""
-        options['insensitive'] = "-i" if args.case_insensitive else ""
-        parsed_options = " ".join(options.values()).strip()
+        options['grep'] = dict()
+        options['find'] = dict()
+        options['grep']['regex'] = "-E" if args.regex else ""
+        options['grep']['insensitive'] = "-i" if args.case_insensitive else ""
+        parsed_grep_options = " ".join(options['grep'].values()).strip()
 
-        # Define the right command. Different if there is or there is no options
+        # Define the right command. Different if there is or there is no options and if -l is present
         if not any(options.values()):
             command = f"find {directory} -type f -print0 | xargs -0 grep {search} | cut -d':' -f1"
         else:
-            command = f"find {directory} -type f -print0 | xargs -0 grep {parsed_options} {search} | cut -d':' -f1"
+            if not args.print_lines:
+                command = f"find {directory} -type f -print0 | xargs -0 grep {parsed_grep_options} {search} | cut -d':' -f1"
+            else:
+                command = f"find {directory} -type f -print0 | xargs -0 grep {parsed_grep_options} -n {search}"
 
         result = subprocess.check_output(command, shell=True, stdin=DEVNULL, stderr=DEVNULL).decode()
 
