@@ -4,7 +4,7 @@ dir=$1
 text=$2
 
 
-output=$(find $dir -type f -print0 | xargs -0 grep "$text" | cut -d: -f1)
+output=$(find $dir -type f -print0 | xargs -0 grep "$text" | cut -d: -f1 | uniq)
 
 
 if [[ "$output" ]]; then
