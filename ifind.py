@@ -92,6 +92,11 @@ if __name__ == '__main__':
         directory = args.directory
         search = args.search
 
+        # Check that directory exists
+        if not os.path.exists(directory):
+            print(f"ifind: {directory} does not exists!")
+            sys.exit(127)
+
         # Store options in a dict object and define a string containing options
         # that have to be included in the command
         options = dict()
