@@ -29,11 +29,11 @@ DEVNULL = open(os.devnull, 'wb')
 USAGE = """
 python3 ifind.py <directory> <search> [options]; OR (if the file has been correctly installed)
 ifind  [options] <directory> <search>
-=======================================
-Examples:                            ¦¦
-ifind . '^thi.+ mine$' --regex       ¦¦
-ifind . 'hello world'                ¦¦
-=======================================
+||=======================================||
+||Examples:                              ||
+||ifind . '^thi.+ mine$' --regex         ||
+||ifind . 'hello world'                  ||
+||=======================================||
 """
 
 

@@ -10,8 +10,7 @@ A simple recursive tool to grep string from all files contained in a directory
 - Then run:
 
   - cd ifind
-  - chmod +x ifind.py
-  - chmod +x ifind.sh (not needed)
+  - chmod +x ifind.py || chmod +x ifind.sh (if you have no python3 interpreter)
   - ln -s /path/to/ifind.py /usr/local/bin/ifind
 
 ### Some Info
