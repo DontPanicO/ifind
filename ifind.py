@@ -129,6 +129,13 @@ if __name__ == '__main__':
         # Output if some result has been find
         lines = []
         for line in result.split("\n"):
+            if args.print_lines:
+                try:
+                    line_parts = line.split(":")
+                    line_parts[2] = line_parts[2].strip()
+                    line = " : ".join(line_parts)
+                except IndexError:
+                    continue
             if line not in lines:
                 lines.append(line)
 
