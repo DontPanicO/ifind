@@ -109,7 +109,7 @@ if __name__ == '__main__':
         parsed_grep_options = " ".join(options['grep'].values()).strip()
 
         # Define the right command.
-        if not any(options.values()):
+        if not any(options['grep'].values()):
             command = f"find {directory} -type f -print0 | xargs -0 grep {search} | cut -d':' -f1"
         else:
             if args.print_lines:
